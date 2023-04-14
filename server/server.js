@@ -10,6 +10,7 @@ const url_1 = process.env.REDIS_URL_1
 const url_2 = process.env.REDIS_URL_2
 const url_3 = process.env.REDIS_URL_3
 
+
 const port = process.env.PORT || 3001;
 
 require('dotenv').config()
@@ -53,20 +54,21 @@ const mapear_query = (palabra) =>{
         const buscarFrase = await esquemaChuck.search().where('query').equals(req.body.palabra).return.all()
 
         if ( buscarFrase.length > 0){ // Si el chiste está en caché
-          console.log("Guardada",buscarFrase)
+          console.log(`Se encuentra guardada en Redis${contenedorRedis}`)
+          console.log(buscarFrase[0].entityFields.value.value)
           res.send(buscarFrase[0].entityFields.value.value)
         }
 
         else {
           const request = await axios.get(`https://api.chucknorris.io/jokes/search?query=${req.body.palabra}`)
-          console.log("No Guardada", request.data.total)
-
           if (request.data.total !== 0){ //si existe el chiste
+            console.log(`No se encuentra en cache, guardando en Redis${contenedorRedis}`)
+            console.log(request.data.result[0].value)
             res.send(request.data.result[0].value) //muestra el chiste al html
             const saveData = await esquemaChuck.createAndSave({ query: req.body.palabra, value: request.data.result[0].value }) //almacena el chiste en redis
           }
           else {
-            res.send("") //pass si no existe el chiste
+            res.send("No existe resultado para esta consulta") //pass si no existe el chiste
           }
         }
       }
@@ -81,9 +83,6 @@ const mapear_query = (palabra) =>{
       console.log(req.body)
       res.json({ palabra: req.body.palabra })
     })
-
-
-
 
 // ------------------------------------------ Estándar servidor -----------------------------------------------------------------
     app.listen(port, function () {

@@ -11,9 +11,14 @@ def call_api(endpoint):
         return response.json()
     else:
         return None
-print(call_api('https://api.chucknorris.io/jokes/random'))
+def call_api(endpoint):
+    response = requests.get(endpoint)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
 
-""" f = open('./datos_api.txt','a')
+f = open('./datos_api.txt','a')
 for i in range(500):
     consulta_escogida = random.choice(consulta)
     inicio = time.time()
@@ -21,7 +26,7 @@ for i in range(500):
     fin  = time.time()
     tiempo = fin - inicio
     f.write('\n' + f"{tiempo}")
-f.close() """   
+f.close()  
 
 
 
