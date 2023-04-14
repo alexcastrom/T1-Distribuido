@@ -10,6 +10,7 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_MAXMEMORY_POLICY=allkeys-lru
+      - REDIS_MAXMEMORY=60mb  # Nueva variable de entorno
 
   redis2:
     image: redislabs/redisearch:latest
@@ -20,6 +21,7 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_MAXMEMORY_POLICY=allkeys-lru
+      - REDIS_MAXMEMORY=60mb  # Nueva variable de entorno
 
   redis3:
     image: redislabs/redisearch:latest
@@ -30,6 +32,8 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_MAXMEMORY_POLICY=allkeys-lru
+      - REDIS_MAXMEMORY=60mb  # Nueva variable de entorno
+
 volumes:
   redis1-data:
   redis2-data:
